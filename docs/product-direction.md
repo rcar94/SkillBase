@@ -91,6 +91,10 @@ such as deprecation and approvals remain later milestone work.
 - `/skills` is the signed-in company home and catalog.
 - `/skills/share` is the signed-in flow for sharing one skill file into the
   company catalog.
+- `/company` is the admin-only company management area for active users,
+  pending invitations, and registration links.
+- `/register` is where invited users complete registration from an admin-created
+  link.
 
 ## Non-Goals for the Initial Version
 

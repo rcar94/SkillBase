@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# supabase local cli state
+/supabase/.temp/
+
 # local browser verification artifacts
 /.playwright-cli/
 /output/

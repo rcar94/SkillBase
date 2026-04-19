@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { can } from "@/lib/auth/permissions";
 import type { CurrentProfile } from "@/lib/auth/session";
 import { signOutAction } from "@/app/login/actions";
 
@@ -11,6 +13,20 @@ export function AppHeader({
     <nav className="mb-10 flex flex-wrap items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-4">
         <span className="text-xl font-semibold">SkillBase</span>
+        <Link
+          className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-950 hover:underline"
+          href="/skills"
+        >
+          Catalog
+        </Link>
+        {can(profile, "company:manage") ? (
+          <Link
+            className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-950 hover:underline"
+            href="/company"
+          >
+            Company
+          </Link>
+        ) : null}
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <span className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-mono text-sm text-zinc-600">

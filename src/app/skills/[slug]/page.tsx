@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireCurrentProfile } from "@/lib/auth/session";
+import { skillOwnerLabel } from "@/lib/skills/display";
 import { buildSkillMarkdown } from "@/lib/skills/markdown";
 import { getWorkspaceSkillBySlug } from "@/lib/skills/repository";
 import { AppHeader } from "@/components/app-header";
@@ -74,6 +75,7 @@ export default async function SkillDetailPage({
   }
 
   const skillMarkdown = skill.sourceMarkdown || buildSkillMarkdown(skill);
+  const ownerLabel = skillOwnerLabel(skill);
   const canDeleteSkill =
     context.profile.role === "admin" || skill.ownerId === context.profile.userId;
 
@@ -113,7 +115,7 @@ export default async function SkillDetailPage({
             </div>
 
             <aside className="h-fit rounded-lg border border-zinc-200 bg-[#fbfbfa] p-5">
-              <p className="font-medium">From @{skill.owner}</p>
+              <p className="font-medium">From {ownerLabel}</p>
               <p className="mt-3 text-sm leading-6 text-zinc-600">
                 {skill.creatorNote}
               </p>
@@ -143,7 +145,7 @@ export default async function SkillDetailPage({
             <dl className="mt-4 space-y-3 text-sm">
               <div className="flex justify-between gap-4">
                 <dt className="text-zinc-500">Owner</dt>
-                <dd className="font-mono">@{skill.owner}</dd>
+                <dd className="font-mono">{ownerLabel}</dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-zinc-500">Audience</dt>

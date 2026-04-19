@@ -117,6 +117,8 @@ async function main() {
       username,
       display_name: username,
       role: "admin",
+      deactivated_at: null,
+      deactivated_by: null,
     },
     { onConflict: "id" },
   );

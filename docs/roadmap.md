@@ -10,7 +10,8 @@ Built:
 - Supabase SSR dependency installed
 - Cookie-aware Supabase browser/server clients and service-role admin client
 - Session refresh proxy
-- Internal login route with email/password sign-in
+- Internal username/password login route
+- Username-first login backed by internal Supabase Auth identities
 - Local `.env.local` convention documented
 - Minimal public landing page with login only
 - Protected catalog browse route wired for Supabase-backed query and category
@@ -21,6 +22,10 @@ Built:
 - Protected skill sharing route with category selection, teammate note, publish
   action, tolerant `.skill` package parsing, and source file preservation
 - Skill deletion from the detail page for the creator or workspace admin
+- Roles reduced to contributor and admin
+- Admin-only company management with active users, pending invitations,
+  repeatable registration link copying, inline role changes, soft deactivation,
+  and permanent user deletion
 - Supabase migration, bootstrap, check, and seed scripts
 - Connected Supabase project migrated, bootstrapped, and seeded
 - Playwright CLI browser verification scripts
@@ -29,7 +34,7 @@ Built:
 Remaining in Milestone 1:
 
 - Add edit skill forms
-- Add admin-created user management beyond the first bootstrap script
+- Add a deactivated-user archive or reactivation flow if needed
 
 ## Milestone 1 - Core Private Marketplace MVP
 

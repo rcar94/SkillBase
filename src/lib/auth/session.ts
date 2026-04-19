@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+export type UserRole = "admin" | "contributor";
+
 export type CurrentProfile = {
   userId: string;
   workspaceId: string;
@@ -9,7 +11,7 @@ export type CurrentProfile = {
   workspaceSlug: string;
   username: string;
   displayName: string | null;
-  role: "admin" | "editor" | "member";
+  role: UserRole;
 };
 
 export type CurrentContext =
@@ -22,7 +24,8 @@ type ProfileRow = {
   workspace_id: string;
   username: string;
   display_name: string | null;
-  role: "admin" | "editor" | "member";
+  role: UserRole;
+  deactivated_at: string | null;
   workspaces: {
     name: string;
     slug: string;
@@ -41,12 +44,18 @@ export async function getCurrentContext(): Promise<CurrentContext> {
   const admin = getSupabaseAdminClient();
   const { data: profile, error: profileError } = await admin
     .from("profiles")
-    .select("id, workspace_id, username, display_name, role, workspaces(name, slug)")
+    .select(
+      "id, workspace_id, username, display_name, role, deactivated_at, workspaces(name, slug)",
+    )
     .eq("id", userId)
     .maybeSingle<ProfileRow>();
 
   if (profileError) {
     throw new Error(`Unable to load profile: ${profileError.message}`);
+  }
+
+  if (profile?.deactivated_at) {
+    return { status: "signed-out" };
   }
 
   if (!profile || !profile.workspaces) {

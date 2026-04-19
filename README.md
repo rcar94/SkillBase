@@ -18,9 +18,11 @@ Built now:
 - Supabase SSR clients, session refresh proxy, and service-role admin client
 - Local environment setup using `.env.local`
 - Minimal public landing page with login only
-- Internal email/password login route with no public signup
+- Internal username/password login route with no public signup
 - Protected catalog browse and skill detail routes
 - Protected skill sharing and publish route
+- Admin-only company management for active users, pending invitations,
+  registration link copying, deactivation, and permanent user deletion
 - Supabase migration, bootstrap, check, and seed scripts
 - Living project documentation
 
@@ -72,6 +74,8 @@ Route model:
 - `/` is a minimal public landing page.
 - `/login` is the internal sign-in page.
 - `/skills` is the signed-in company home and catalog.
+- `/company` is the admin-only company management area.
+- `/register` completes registration from an admin-created link.
 
 ## Commands
 

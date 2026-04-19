@@ -32,8 +32,8 @@ export default async function LoginPage({
         </p>
         <h1 className="mt-3 text-3xl font-semibold">Sign in</h1>
         <p className="mt-3 leading-7 text-zinc-600">
-          Use the account created by a company admin. Public signup is not
-          available in this MVP.
+          Use your company username and password. Public signup is not available
+          in this MVP.
         </p>
 
         {params.error ? (
@@ -45,13 +45,13 @@ export default async function LoginPage({
         <form action={signInAction} className="mt-6 space-y-4">
           <input name="next" type="hidden" value={nextPath} />
           <label className="block">
-            <span className="text-sm font-medium text-zinc-700">Email</span>
+            <span className="text-sm font-medium text-zinc-700">Username</span>
             <input
-              autoComplete="email"
+              autoComplete="username"
               className="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-950"
-              name="email"
+              name="username"
               required
-              type="email"
+              type="text"
             />
           </label>
           <label className="block">

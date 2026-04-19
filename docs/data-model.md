@@ -7,6 +7,9 @@ migrations live in `supabase/migrations`.
 
 - `workspaces`: one company workspace.
 - `profiles`: minimal username-first user records linked to Supabase auth users.
+- `user_invitations`: admin-created registration links for username-first
+  onboarding without sending email. Pending invitations appear in Company
+  Management so admins can copy registration links again after refresh.
 - `categories`: default or workspace-owned organization labels.
 - `skills`: catalog entries with owner, category, creator note, audience,
   status, summary, examples, source Markdown, and core usage fields.
@@ -17,10 +20,23 @@ migrations live in `supabase/migrations`.
 - `collections`: curated groups of skills.
 - `collection_skills`: ordered skills inside a collection.
 
+Profiles use two product roles: `admin` and `contributor`. Contributors can use
+the catalog and share skills. Admins can also manage company users.
+
+Profiles can be soft-deactivated with `deactivated_at`. Deactivated users cannot
+sign in or continue using protected routes, while skills they created stay
+visible and show the owner as deactivated.
+
+Admins can also permanently delete a user from Company Management. Hard deletion
+uses Supabase Admin Auth to delete the `auth.users` row; the linked `profiles`
+row is removed by cascade. Existing skills stay visible because ownership
+references use `on delete set null`.
+
 ## Current Boundary
 
 The app includes SSR auth helpers, a login route, a session-refresh proxy,
-service-role server queries, and one-time bootstrap/seed scripts.
+service-role server queries, username-first registration links, company
+management actions, and one-time bootstrap/seed scripts.
 
 The remote Supabase project still needs the migrations applied. Run:
 

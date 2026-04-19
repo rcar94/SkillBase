@@ -30,6 +30,7 @@ async function main() {
     "skill_versions",
     "skill_tags",
     "skill_tools",
+    "user_invitations",
   ]) {
     console.log(await countTable(table));
   }
@@ -54,12 +55,35 @@ async function main() {
     return;
   }
 
-  const [{ count: profileCount }, { count: categoryCount }, { count: skillCount }] =
-    await Promise.all([
+  const [
+    { count: profileCount },
+    { count: activeProfileCount },
+    { count: adminCount },
+    { count: contributorCount },
+    { count: categoryCount },
+    { count: skillCount },
+  ] = await Promise.all([
       supabase
         .from("profiles")
         .select("*", { count: "exact", head: true })
         .eq("workspace_id", workspace.id),
+      supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("workspace_id", workspace.id)
+        .is("deactivated_at", null),
+      supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("workspace_id", workspace.id)
+        .eq("role", "admin")
+        .is("deactivated_at", null),
+      supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("workspace_id", workspace.id)
+        .eq("role", "contributor")
+        .is("deactivated_at", null),
       supabase
         .from("categories")
         .select("*", { count: "exact", head: true })
@@ -72,6 +96,9 @@ async function main() {
 
   console.log(`workspace:${workspace.slug}=exists`);
   console.log(`workspace_profiles=${profileCount ?? 0}`);
+  console.log(`workspace_active_profiles=${activeProfileCount ?? 0}`);
+  console.log(`workspace_admins=${adminCount ?? 0}`);
+  console.log(`workspace_contributors=${contributorCount ?? 0}`);
   console.log(`workspace_categories=${categoryCount ?? 0}`);
   console.log(`workspace_skills=${skillCount ?? 0}`);
 }

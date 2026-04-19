@@ -4,6 +4,7 @@ import {
   getWorkspaceCategories,
   listWorkspaceSkills,
 } from "@/lib/skills/repository";
+import { skillOwnerLabel } from "@/lib/skills/display";
 import { AppHeader } from "@/components/app-header";
 import { SetupRequired } from "@/components/setup-required";
 
@@ -135,7 +136,7 @@ export default async function SkillsPage({
                     {skill.category}
                   </span>
                   <span className="rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-1 font-mono text-sm text-zinc-600">
-                    @{skill.owner}
+                    {skillOwnerLabel(skill)}
                   </span>
                 </div>
               </article>

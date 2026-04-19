@@ -113,3 +113,26 @@ and `Read skill file` is the place to inspect the full instructions and source.
 The page now uses direct actions: download the canonical `SKILL.md`, read the
 skill file, or copy the skill link. Missing or cross-workspace skill URLs show a
 workspace-scoped empty state after login instead of a generic 404.
+
+## 2026-04-19 - Use Username-First Roles and Registration Links
+
+SkillBase now uses two product roles: `contributor` and `admin`. Contributors
+can use the product and share skills. Admins can also manage company users.
+
+Admins create registration links from usernames instead of collecting emails.
+SkillBase creates the underlying Supabase Auth identity with an internal
+synthetic email only when the invited teammate completes registration. Links are
+shown to admins for manual sharing and expire after seven days.
+
+Pending invitations are shown in the Company Management users table until they
+are accepted, deleted, or expired. Registration URLs use the invitation id as a
+stable bearer link so admins can copy the URL again after refreshing the page;
+older token-based links remain accepted for compatibility.
+
+Users are soft-deactivated through `profiles.deactivated_at` rather than
+deleted. Existing skills remain visible and show the creator as deactivated.
+
+Permanent user deletion is available only from the admin Company Management
+area. It deletes the Supabase Auth user through the server-only Admin Auth API
+instead of deleting `profiles` directly. The profile row cascades from Auth, and
+skills remain in the catalog with their owner reference cleared.

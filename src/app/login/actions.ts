@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { resolveActiveLoginEmail } from "@/lib/company/users";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function getSafeNextPath(value: FormDataEntryValue | null) {
@@ -11,12 +12,18 @@ function getSafeNextPath(value: FormDataEntryValue | null) {
 }
 
 export async function signInAction(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim();
+  const username = String(formData.get("username") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const nextPath = getSafeNextPath(formData.get("next"));
 
-  if (!email || !password) {
-    redirect(`/login?error=${encodeURIComponent("Email and password are required.")}`);
+  if (!username || !password) {
+    redirect(`/login?error=${encodeURIComponent("Username and password are required.")}`);
+  }
+
+  const email = await resolveActiveLoginEmail(username);
+
+  if (!email) {
+    redirect(`/login?error=${encodeURIComponent("Unable to sign in with those credentials.")}`);
   }
 
   const supabase = await createSupabaseServerClient();

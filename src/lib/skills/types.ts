@@ -30,6 +30,7 @@ export type Skill = {
   status: SkillStatus;
   owner: string;
   ownerId?: string | null;
+  ownerDeactivated?: boolean;
   audience: string;
   useWhen: string;
   produces: string;

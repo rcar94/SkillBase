@@ -28,7 +28,7 @@ type SkillRow = {
   category_id: string | null;
   owner_id: string | null;
   categories: { name: SkillCategory } | null;
-  profiles: { username: string } | null;
+  profiles: { username: string; deactivated_at: string | null } | null;
 };
 
 type VersionRow = {
@@ -85,7 +85,7 @@ export async function listWorkspaceSkills({
   let request = supabase
     .from("skills")
     .select(
-      "id, slug, title, summary, creator_note, audience, use_when, produces, instructions, examples, source_markdown, status, current_version, updated_at, category_id, owner_id, categories(name), profiles(username)",
+      "id, slug, title, summary, creator_note, audience, use_when, produces, instructions, examples, source_markdown, status, current_version, updated_at, category_id, owner_id, categories(name), profiles(username, deactivated_at)",
     )
     .eq("workspace_id", workspaceId)
     .order("title", { ascending: true });
@@ -129,7 +129,7 @@ export async function getWorkspaceSkillBySlug({
   const { data, error } = await supabase
     .from("skills")
     .select(
-      "id, slug, title, summary, creator_note, audience, use_when, produces, instructions, examples, source_markdown, status, current_version, updated_at, category_id, owner_id, categories(name), profiles(username)",
+      "id, slug, title, summary, creator_note, audience, use_when, produces, instructions, examples, source_markdown, status, current_version, updated_at, category_id, owner_id, categories(name), profiles(username, deactivated_at)",
     )
     .eq("workspace_id", workspaceId)
     .eq("slug", slug)
@@ -335,6 +335,7 @@ async function hydrateSkills(rows: SkillRow[]): Promise<Skill[]> {
       status: fromDbStatus(row.status),
       owner: row.profiles?.username ?? "unassigned",
       ownerId: row.owner_id,
+      ownerDeactivated: Boolean(row.profiles?.deactivated_at),
       audience: row.audience,
       useWhen: row.use_when,
       produces: row.produces,
