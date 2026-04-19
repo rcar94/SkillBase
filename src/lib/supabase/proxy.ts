@@ -30,7 +30,11 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  await supabase.auth.getClaims();
+  try {
+    await supabase.auth.getClaims();
+  } catch (error) {
+    console.error("Unable to refresh Supabase session in proxy.", error);
+  }
 
   return response;
 }
