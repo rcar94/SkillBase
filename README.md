@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SkillBase
 
-## Getting Started
+SkillBase is a private internal marketplace for reusable company skills and
+workflows. It stores a common internal skill standard that teammates can reuse
+in the AI tools they already work with.
 
-First, run the development server:
+The product is not a public marketplace and does not sell anything. It is a
+company-scoped workspace for creating, organizing, approving, discovering,
+sharing, and installing internal skills.
+
+## Current Status
+
+Milestone 1 foundation is in progress.
+
+Built now:
+
+- Next.js App Router app ready for Vercel
+- Supabase SSR clients, session refresh proxy, and service-role admin client
+- Local environment setup using `.env.local`
+- Minimal public landing page with login only
+- Internal email/password login route with no public signup
+- Protected catalog browse and skill detail routes
+- Protected skill sharing and publish route
+- Supabase migration, bootstrap, check, and seed scripts
+- Living project documentation
+
+Not built yet:
+
+- Persistent skill editing forms
+- Install/export packaging for the common SkillBase standard
+- Approval workflows, collections, favorites, and changelog UI
+
+## Local Setup
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Copy the local Supabase variables into `.env.local`. This repo keeps `.env` and
+`.env.local` untracked.
+
+```bash
+cp .env.example .env.local
+```
+
+Required variables:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_DB_URL=
+SKILLBASE_WORKSPACE_NAME=
+SKILLBASE_WORKSPACE_SLUG=
+SKILLBASE_BOOTSTRAP_EMAIL=
+SKILLBASE_BOOTSTRAP_PASSWORD=
+SKILLBASE_BOOTSTRAP_USERNAME=
+```
+
+Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Route model:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/` is a minimal public landing page.
+- `/login` is the internal sign-in page.
+- `/skills` is the signed-in company home and catalog.
 
-## Learn More
+## Commands
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Browser verification uses Playwright CLI. Keep `npm run dev` running in one
+terminal, then run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run browser:open
+npm run browser:snapshot
+npm run browser:console
+npm run browser:close
+```
 
-## Deploy on Vercel
+Use `browser:snapshot` for an accessibility snapshot and `browser:console` to
+check browser warnings and errors.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Database setup uses the connected Supabase project:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run db:check
+npm run db:migrate
+npm run db:bootstrap
+npm run db:seed
+npm run db:check
+```
+
+`db:migrate` requires `SUPABASE_DB_URL`, the direct Supabase Postgres connection
+string. API keys alone can read and write existing REST tables, but they cannot
+create tables or apply SQL migrations.
+
+## Project Docs
+
+- [Agent operating guide](./AGENTS.md)
+- [Claude project guide](./CLAUDE.md)
+- [Product direction](./docs/product-direction.md)
+- [Roadmap and status](./docs/roadmap.md)
+- [Decisions](./docs/decisions.md)
+
+## Implementation Notes
+
+Supabase clients live under `src/lib/supabase`.
+
+- `browser.ts` creates a cookie-aware browser client.
+- `server.ts` creates a cookie-aware Server Component / Server Action client.
+- `admin.ts` creates the service-role client for trusted server-only reads and
+  local scripts.
+- The service role key must never be imported into client components or exposed
+  in rendered UI.
+
+Skill seed data lives under `src/lib/skills`. The first Supabase migration lives
+under `supabase/migrations` and should be reviewed before it is applied to a
+remote project.

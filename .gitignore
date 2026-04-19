@@ -32,9 +32,48 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
+
+# local browser verification artifacts
+/.playwright-cli/
+/output/
+
+# local agent skill installs
+/.adal/
+/.agents/
+/.augment/
+/.bob/
+/.claude/
+/.codebuddy/
+/.commandcode/
+/.continue/
+/.cortex/
+/.crush/
+/.factory/
+/.goose/
+/.iflow/
+/.junie/
+/.kilocode/
+/.kiro/
+/.kode/
+/.mcpjam/
+/.mux/
+/.neovate/
+/.openhands/
+/.pi/
+/.pochi/
+/.qoder/
+/.qwen/
+/.roo/
+/.trae/
+/.vibe/
+/.windsurf/
+/.zencoder/
+/skills/
+/skills-lock.json
 
 # typescript
 *.tsbuildinfo
