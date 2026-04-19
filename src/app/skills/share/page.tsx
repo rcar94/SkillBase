@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: "Share skill - SkillBase",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ShareSkillPage() {
   const context = await requireCurrentProfile("/skills/share");
 
