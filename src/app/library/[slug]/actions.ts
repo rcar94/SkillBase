@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getCurrentContext } from "@/lib/auth/session";
 import { deleteWorkspaceArtifact } from "@/lib/artifacts/repository";
 
-export async function deleteSkillAction(formData: FormData) {
+export async function deleteArtifactAction(formData: FormData) {
   const slug = String(formData.get("slug") ?? "").trim();
 
   if (!slug) {

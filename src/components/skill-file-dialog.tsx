@@ -5,9 +5,16 @@ import { useEffect, useState } from "react";
 type SkillFileDialogProps = {
   filename: string;
   markdown: string;
+  title?: string;
+  actionLabel?: string;
 };
 
-export function SkillFileDialog({ filename, markdown }: SkillFileDialogProps) {
+export function SkillFileDialog({
+  filename,
+  markdown,
+  title = "Artifact file",
+  actionLabel = "Read artifact file",
+}: SkillFileDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export function SkillFileDialog({ filename, markdown }: SkillFileDialogProps) {
         onClick={() => setIsOpen(true)}
         type="button"
       >
-        Read skill file
+        {actionLabel}
       </button>
 
       {isOpen ? (
@@ -49,7 +56,7 @@ export function SkillFileDialog({ filename, markdown }: SkillFileDialogProps) {
                   className="text-xl font-semibold text-zinc-950"
                   id="skill-file-title"
                 >
-                  Skill file
+                  {title}
                 </h2>
                 <p className="mt-1 font-mono text-sm text-zinc-500">
                   {filename}
@@ -74,3 +81,5 @@ export function SkillFileDialog({ filename, markdown }: SkillFileDialogProps) {
     </>
   );
 }
+
+export const ArtifactFileDialog = SkillFileDialog;

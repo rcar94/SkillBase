@@ -71,5 +71,5 @@ export async function completeRegistrationAction(formData: FormData) {
     redirect("/login");
   }
 
-  redirect("/skills");
+  redirect("/library");
 }

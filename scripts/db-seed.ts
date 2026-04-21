@@ -1,5 +1,5 @@
-import { defaultCategories, skills } from "../src/lib/skills/data";
-import { slugify, toDbStatus, toDbTool } from "../src/lib/skills/mappers";
+import { artifacts, defaultCategories } from "../src/lib/artifacts/data";
+import { slugify, toDbStatus, toDbTool } from "../src/lib/artifacts/mappers";
 import { loadLocalEnv, requireEnv } from "./lib/env";
 import { createAdminClient } from "./lib/supabase";
 
@@ -90,49 +90,55 @@ async function main() {
     throw new Error("No workspace profile found. Run npm run db:bootstrap first.");
   }
 
-  for (const skill of skills) {
-    const category = categories.find((item) => item.name === skill.category);
+  for (const artifact of artifacts) {
+    const category = categories.find((item) => item.name === artifact.category);
     const owner =
-      profiles.find((profile) => profile.username === skill.owner) ??
+      profiles.find((profile) => profile.username === artifact.owner) ??
       fallbackOwner;
 
-    const { data: upsertedSkill, error: skillError } = await supabase
+    const { data: upsertedArtifact, error: artifactError } = await supabase
       .from("skills")
       .upsert(
         {
           workspace_id: workspace.id,
           category_id: category?.id ?? null,
           owner_id: owner.id,
-          slug: skill.slug,
-          title: skill.title,
-          summary: skill.summary,
-          creator_note: skill.creatorNote,
-          audience: skill.audience,
-          use_when: skill.useWhen,
-          produces: skill.produces,
-          instructions: skill.instructions,
-          examples: skill.examples,
-          source_markdown: skill.sourceMarkdown,
-          status: toDbStatus(skill.status),
-          current_version: skill.version.version,
-          updated_at: skill.updatedAt,
+          slug: artifact.slug,
+          title: artifact.title,
+          summary: artifact.summary,
+          creator_note: artifact.creatorNote,
+          audience: artifact.audience,
+          use_when: artifact.useWhen,
+          produces: artifact.produces,
+          instructions: artifact.instructions,
+          examples: artifact.examples,
+          source_markdown: artifact.sourceMarkdown,
+          status: toDbStatus(artifact.status),
+          current_version: artifact.version.version,
+          updated_at: artifact.updatedAt,
+          artifact_type: artifact.type,
+          source_mode: artifact.sourceMode,
+          external_url: artifact.externalUrl ?? null,
+          external_source_label: artifact.externalSourceLabel ?? null,
         },
         { onConflict: "workspace_id,slug" },
       )
       .select("id")
       .single<{ id: string }>();
 
-    if (skillError) throw skillError;
-    if (!upsertedSkill) throw new Error(`Unable to seed skill: ${skill.slug}`);
+    if (artifactError) throw artifactError;
+    if (!upsertedArtifact) {
+      throw new Error(`Unable to seed artifact: ${artifact.slug}`);
+    }
 
     const { error: versionError } = await supabase.from("skill_versions").upsert(
       {
-        skill_id: upsertedSkill.id,
-        version: skill.version.version,
-        instructions: skill.instructions,
-        changelog: skill.version.notes,
+        skill_id: upsertedArtifact.id,
+        version: artifact.version.version,
+        instructions: artifact.instructions,
+        changelog: artifact.version.notes,
         created_by: owner.id,
-        created_at: skill.version.publishedAt,
+        created_at: artifact.version.publishedAt,
       },
       { onConflict: "skill_id,version" },
     );
@@ -142,14 +148,14 @@ async function main() {
     const { error: deleteTagsError } = await supabase
       .from("skill_tags")
       .delete()
-      .eq("skill_id", upsertedSkill.id);
+      .eq("skill_id", upsertedArtifact.id);
 
     if (deleteTagsError) throw deleteTagsError;
 
-    if (skill.tags.length > 0) {
+    if (artifact.tags.length > 0) {
       const { error: tagError } = await supabase.from("skill_tags").insert(
-        skill.tags.map((tag) => ({
-          skill_id: upsertedSkill.id,
+        artifact.tags.map((tag) => ({
+          skill_id: upsertedArtifact.id,
           tag,
         })),
       );
@@ -160,23 +166,25 @@ async function main() {
     const { error: deleteToolsError } = await supabase
       .from("skill_tools")
       .delete()
-      .eq("skill_id", upsertedSkill.id);
+      .eq("skill_id", upsertedArtifact.id);
 
     if (deleteToolsError) throw deleteToolsError;
 
-    const { error: toolError } = await supabase.from("skill_tools").insert(
-      skill.tools.map((tool) => ({
-        skill_id: upsertedSkill.id,
-        tool: toDbTool(tool),
-        install_notes: skill.install[tool],
-      })),
-    );
+    if (artifact.tools.length > 0) {
+      const { error: toolError } = await supabase.from("skill_tools").insert(
+        artifact.tools.map((tool) => ({
+          skill_id: upsertedArtifact.id,
+          tool: toDbTool(tool),
+          install_notes: artifact.install[tool] ?? "",
+        })),
+      );
 
-    if (toolError) throw toolError;
+      if (toolError) throw toolError;
+    }
   }
 
   console.log(`workspace=${workspace.slug}`);
-  console.log(`seeded_skills=${skills.length}`);
+  console.log(`seeded_artifacts=${artifacts.length}`);
   console.log("seed=ready");
 }
 

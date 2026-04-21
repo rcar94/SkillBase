@@ -15,9 +15,9 @@ export function AppHeader({
         <span className="text-xl font-semibold">SkillBase</span>
         <Link
           className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-950 hover:underline"
-          href="/skills"
+          href="/library"
         >
-          Catalog
+          Library
         </Link>
         {can(profile, "company:manage") ? (
           <Link

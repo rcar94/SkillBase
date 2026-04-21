@@ -15,7 +15,7 @@ export default async function LoginPage({
 }) {
   const params = await searchParams;
   const context = await getCurrentContext();
-  const nextPath = params.next?.startsWith("/") ? params.next : "/skills";
+  const nextPath = params.next?.startsWith("/") ? params.next : "/library";
 
   if (context.status !== "signed-out") {
     redirect(nextPath);

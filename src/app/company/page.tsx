@@ -42,7 +42,7 @@ export default async function CompanyPage({
   }
 
   if (!can(context.profile, "company:manage")) {
-    redirect("/skills");
+    redirect("/library");
   }
 
   const users = await listWorkspaceUsers({

@@ -5,10 +5,10 @@ import { resolveActiveLoginEmail } from "@/lib/company/users";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function getSafeNextPath(value: FormDataEntryValue | null) {
-  const nextPath = typeof value === "string" ? value : "/skills";
+  const nextPath = typeof value === "string" ? value : "/library";
   return nextPath.startsWith("/") && !nextPath.startsWith("//")
     ? nextPath
-    : "/skills";
+    : "/library";
 }
 
 export async function signInAction(formData: FormData) {

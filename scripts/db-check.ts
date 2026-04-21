@@ -61,7 +61,7 @@ async function main() {
     { count: adminCount },
     { count: contributorCount },
     { count: categoryCount },
-    { count: skillCount },
+    { count: artifactCount },
   ] = await Promise.all([
       supabase
         .from("profiles")
@@ -100,7 +100,7 @@ async function main() {
   console.log(`workspace_admins=${adminCount ?? 0}`);
   console.log(`workspace_contributors=${contributorCount ?? 0}`);
   console.log(`workspace_categories=${categoryCount ?? 0}`);
-  console.log(`workspace_skills=${skillCount ?? 0}`);
+  console.log(`workspace_artifacts=${artifactCount ?? 0}`);
 }
 
 main().catch((error) => {

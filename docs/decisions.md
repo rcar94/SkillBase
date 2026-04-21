@@ -1,5 +1,20 @@
 # Decisions
 
+## 2026-04-21 - Expand SkillBase from Skills to a Shared AI Artifact Library
+
+SkillBase now treats skills as one artifact type inside a broader internal AI
+library. The first curated built-in types are skills, MCPs, plugins, product
+context, and company context.
+
+The app-level domain model becomes artifact-oriented while the existing
+`skills` table remains the current storage layer for compatibility. Artifact
+type and source mode are separate concepts: an entry can be uploaded company
+content or a trusted external link with internal guidance layered on top.
+
+The primary signed-in surface moves to `/library`, while `/skills` remains as a
+compatibility route that filters the library to skills. This keeps existing
+links viable while letting the product story broaden beyond `SKILL.md` files.
+
 ## 2026-04-15 - Use Next.js App Router on Vercel
 
 SkillBase starts as a Next.js App Router app because the product is a

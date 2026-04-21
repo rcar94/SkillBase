@@ -2,11 +2,12 @@
 
 ## Vision
 
-Make company workflows installable.
+Make company AI usage consistent.
 
-SkillBase is the internal app store for company know-how. It helps teams turn
-trusted prompts, guidance, examples, and workflow instructions into reusable
-skills that teammates can discover and use inside Claude and Codex.
+SkillBase is the internal library for reusable AI artifacts. It helps teams
+turn trusted prompts, install references, guidance, context docs, examples, and
+workflow instructions into reusable assets that teammates can discover and use
+inside Claude, Codex, and adjacent AI tools.
 
 ## Product Principles
 
@@ -14,8 +15,8 @@ skills that teammates can discover and use inside Claude and Codex.
 - Simple first: the MVP proves the core loop without platform sprawl.
 - Internal by default: this is a private company workspace, not a public
   marketplace.
-- Reusable and trusted: every skill should be easy to understand, clearly owned,
-  and visibly maintained.
+- Reusable and trusted: every artifact should be easy to understand, clearly
+  owned, and visibly maintained.
 - Useful beyond engineering: product, design, marketing, finance, operations,
   support, and other teams must be first-class users.
 - Documentation is a product feature: repo docs and product status must stay
@@ -25,9 +26,9 @@ skills that teammates can discover and use inside Claude and Codex.
 
 Primary users:
 
-- Individual contributors browsing and installing useful skills
-- Teammates creating and sharing reusable workflows
-- Team leads and domain owners maintaining trusted skills
+- Individual contributors browsing and reusing useful AI artifacts
+- Teammates creating and sharing reusable workflows and context
+- Team leads and domain owners maintaining trusted team AI assets
 
 Secondary users:
 
@@ -36,61 +37,58 @@ Secondary users:
 
 ## Core Loop
 
-1. Create a skill from a simple form or uploaded package.
-2. Organize it with owner, category, audience, and version.
+1. Share an artifact as uploaded content or a trusted external link.
+2. Organize it with type, owner, category, audience, and version.
 3. Share it through a stable internal link.
-4. Install or start using it in Claude or Codex.
+4. Install or start using it in Claude, Codex, or the relevant external tool.
 5. Reuse and improve it as the company workflow changes.
 
-## Skill Page Direction
+## Artifact Page Direction
 
-The skill detail page should help a teammate understand and reuse a workflow
-quickly. Prioritize what the skill does, when to use it, what it produces, who
-posted it, and who it is for.
+The artifact detail page should help a teammate understand and reuse something
+quickly. Prioritize what the artifact is, when to use it, what it produces,
+whether it is uploaded or externally linked, who shared it, and who it is for.
 
 For the MVP, avoid making tags, status, installs, or upvotes the center of the
-detail page. Tags and trust states can stay in the data model for future
-discovery and governance, but the first skill page should feel like a clear
-internal usage brief rather than an admin record.
+detail page. The first artifact page should feel like a clear internal usage
+brief with provenance rather than an admin record.
 
-SkillBase should store one canonical skill package format for company skills.
-Claude and Codex are destinations for the same standard, not separate skill
-types in the browsing or detail experience.
+SkillBase should support a shared artifact foundation with a curated set of
+first-class types: skills, MCPs, plugins, product context, and company context.
+These types should feel native in one library rather than like disconnected
+products.
 
-The detail page should help teammates decide whether to reuse a skill without
-duplicating the full source. The title summary explains what the skill does,
-`What you get` explains the output, and the canonical skill file is available
-through read and download actions. In the MVP this is generated from persisted
-SkillBase fields or preserved uploaded source and shown/downloaded as
-`SKILL.md` content; later milestones can turn the same content into richer
-installable artifacts.
+The detail page should help teammates decide whether to reuse an artifact
+without duplicating the full source. The title summary explains what it is,
+`What teammates get` explains the value, internal guidance explains how to use
+it, and uploaded artifacts should expose their markdown source for reading or
+download. External-link artifacts should also show the external source and why
+the team recommends it.
 
-The first authoring path is framed as sharing, not importing. A teammate uploads
-one skill file, adds a short note, chooses a category, and shares it into the
-private catalog.
+The first authoring path is framed as sharing, not importing. A teammate either
+uploads owned content or shares a trusted external link, adds internal guidance,
+chooses a category, and publishes it into the private library.
 
-SkillBase accepts Markdown source and Claude `.skill` exports. Packaged exports
-are unpacked to find the underlying `SKILL.md`, but the user should not need to
-know that detail. Real exported skills do not always use the same section
-headings, so the parser should be tolerant: frontmatter `description` can be the
-summary, `What you produce` counts as output context, and the body after the
-title can be used as instructions when no explicit `Instructions` section
-exists.
+Skills continue to accept Markdown source and Claude `.skill` exports. Other
+artifact types begin with markdown-first sharing for uploaded content and shared
+external links for install references or source-of-truth documents.
 
-Asset handling and richer multi-file imports are intentionally deferred until
-the core sharing loop is working.
+Asset handling, richer multi-file imports, and deeper type-specific packaging
+are intentionally deferred until the core sharing loop is working.
 
-The first removal path is deliberately limited: a shared skill can be deleted by
-the teammate who created it or by a workspace admin. Broader governance states
+The first removal path is deliberately limited: a shared artifact can be deleted
+by the teammate who created it or by a workspace admin. Broader governance states
 such as deprecation and approvals remain later milestone work.
 
 ## Current Route Model
 
 - `/` is a minimal public landing page with login only.
 - `/login` is the internal sign-in page.
-- `/skills` is the signed-in company home and catalog.
-- `/skills/share` is the signed-in flow for sharing one skill file into the
-  company catalog.
+- `/library` is the signed-in company home and catalog.
+- `/library/share` is the signed-in flow for sharing uploaded or external-link
+  artifacts.
+- `/skills` and `/skills/share` remain compatibility routes for skill-focused
+  entry points.
 - `/company` is the admin-only company management area for active users,
   pending invitations, and registration links.
 - `/register` is where invited users complete registration from an admin-created

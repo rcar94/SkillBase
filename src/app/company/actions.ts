@@ -32,7 +32,7 @@ async function requireCompanyAdmin() {
   }
 
   if (context.status === "missing-profile" || !can(context.profile, "company:manage")) {
-    redirect("/skills");
+    redirect("/library");
   }
 
   return context.profile;

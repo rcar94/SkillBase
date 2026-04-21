@@ -22,14 +22,15 @@ export default function Home() {
 
         <div className="max-w-3xl">
           <p className="mb-4 font-mono text-sm text-zinc-500">
-            Internal workflow marketplace
+            Internal AI library
           </p>
           <h1 className="text-4xl font-semibold leading-tight md:text-6xl">
-            Reusable company skills for Claude and Codex.
+            Reusable team AI assets for consistent work.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600">
-            SkillBase helps teams keep trusted internal workflows organized,
-            owned, and ready to use inside the AI tools they already work with.
+            SkillBase helps teams keep trusted skills, MCPs, plugins, and
+            shared context organized, owned, and ready to reuse in the AI tools
+            they already work with.
           </p>
         </div>
       </section>

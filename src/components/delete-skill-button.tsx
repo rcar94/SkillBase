@@ -12,7 +12,7 @@ export function DeleteSkillButton() {
       onClick={(event) => {
         if (
           !window.confirm(
-            "Delete this skill from the company catalog? This cannot be undone.",
+            "Delete this artifact from the company library? This cannot be undone.",
           )
         ) {
           event.preventDefault();
@@ -20,7 +20,9 @@ export function DeleteSkillButton() {
       }}
       type="submit"
     >
-      {pending ? "Deleting..." : "Delete skill"}
+      {pending ? "Deleting..." : "Delete artifact"}
     </button>
   );
 }
+
+export const DeleteArtifactButton = DeleteSkillButton;

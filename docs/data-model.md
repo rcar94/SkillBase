@@ -11,17 +11,19 @@ migrations live in `supabase/migrations`.
   onboarding without sending email. Pending invitations appear in Company
   Management so admins can copy registration links again after refresh.
 - `categories`: default or workspace-owned organization labels.
-- `skills`: catalog entries with owner, category, creator note, audience,
-  status, summary, examples, source Markdown, and core usage fields.
+- `skills`: the current backing table for shared library entries. It now stores
+  generic artifacts with shared fields plus artifact type, source mode, and
+  optional external-link metadata.
 - `skill_versions`: versioned instructions and changelog entries.
 - `skill_tags`: lightweight labels for discovery.
-- `skill_tools`: legacy destination metadata kept for now, hidden from the MVP
-  browsing and detail experience.
-- `collections`: curated groups of skills.
-- `collection_skills`: ordered skills inside a collection.
+- `skill_tools`: compatibility/install notes used where artifacts need tool-
+  specific guidance.
+- `collections`: curated groups of artifacts.
+- `collection_skills`: ordered artifact membership inside a collection until the
+  join table is generalized in a later pass.
 
 Profiles use two product roles: `admin` and `contributor`. Contributors can use
-the catalog and share skills. Admins can also manage company users.
+the library and share artifacts. Admins can also manage company users.
 
 Profiles can be soft-deactivated with `deactivated_at`. Deactivated users cannot
 sign in or continue using protected routes, while skills they created stay
@@ -57,13 +59,15 @@ verified, reads can move toward authenticated RLS-backed queries.
 Typed seed data in `src/lib/skills/data.ts` is now the source for `db:seed`, not
 the protected catalog runtime.
 
-Shared skills preserve the extracted Markdown source in
+Shared uploaded artifacts preserve their Markdown source in
 `skills.source_markdown`. For direct Markdown uploads this is the uploaded file;
 for packaged `.skill` files this is the extracted `SKILL.md`. The detail page
 shows this preserved source when present and falls back to generated Markdown
-for seeded or legacy rows.
+for seeded or legacy rows. External-link artifacts store the internal guidance
+and the external source separately so the library can show provenance and a
+direct external CTA.
 
-The parser intentionally accepts real-world variation. It can use frontmatter
+The skill parser intentionally accepts real-world variation. It can use frontmatter
 `description` as the summary, `What you produce` as output context, and the
 Markdown body after the title as instructions when no explicit `Instructions`
 section exists.

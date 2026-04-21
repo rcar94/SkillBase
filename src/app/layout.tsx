@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SkillBase",
-  description: "Internal skills and workflows for Claude and Codex.",
+  description: "Internal AI library for reusable team skills, MCPs, plugins, and shared context.",
 };
 
 export default function RootLayout({

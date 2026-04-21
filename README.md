@@ -1,12 +1,13 @@
 # SkillBase
 
-SkillBase is a private internal marketplace for reusable company skills and
-workflows. It stores a common internal skill standard that teammates can reuse
-in the AI tools they already work with.
+SkillBase is a private internal library for reusable company AI artifacts and
+workflows. It stores shared skills, MCP references, plugins, product context,
+company context, and other reusable assets that help teammates use AI
+consistently in the tools they already work with.
 
 The product is not a public marketplace and does not sell anything. It is a
-company-scoped workspace for creating, organizing, approving, discovering,
-sharing, and installing internal skills.
+company-scoped workspace for creating, organizing, discovering, sharing, and
+reusing internal AI artifacts.
 
 ## Current Status
 
@@ -19,8 +20,8 @@ Built now:
 - Local environment setup using `.env.local`
 - Minimal public landing page with login only
 - Internal username/password login route with no public signup
-- Protected catalog browse and skill detail routes
-- Protected skill sharing and publish route
+- Protected library browse and artifact detail routes
+- Protected artifact sharing route with uploaded and external-link modes
 - Admin-only company management for active users, pending invitations,
   registration link copying, deactivation, and permanent user deletion
 - Supabase migration, bootstrap, check, and seed scripts
@@ -28,9 +29,9 @@ Built now:
 
 Not built yet:
 
-- Persistent skill editing forms
-- Install/export packaging for the common SkillBase standard
-- Approval workflows, collections, favorites, and changelog UI
+- Persistent artifact editing forms
+- Install/export packaging for richer artifact handoff
+- Collections, starter packs, favorites, and changelog UI
 
 ## Local Setup
 
@@ -73,7 +74,8 @@ Route model:
 
 - `/` is a minimal public landing page.
 - `/login` is the internal sign-in page.
-- `/skills` is the signed-in company home and catalog.
+- `/library` is the signed-in company home and artifact catalog.
+- `/skills` remains as a compatibility route that filters the library to skills.
 - `/company` is the admin-only company management area.
 - `/register` completes registration from an admin-created link.
 
@@ -132,6 +134,6 @@ Supabase clients live under `src/lib/supabase`.
 - The service role key must never be imported into client components or exposed
   in rendered UI.
 
-Skill seed data lives under `src/lib/skills`. The first Supabase migration lives
-under `supabase/migrations` and should be reviewed before it is applied to a
-remote project.
+Seeded artifact examples live under `src/lib/artifacts`. The Supabase migrations
+live under `supabase/migrations` and should be reviewed before they are applied
+to a remote project.
